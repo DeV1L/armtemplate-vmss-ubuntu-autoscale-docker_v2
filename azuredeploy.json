@@ -46,7 +46,14 @@
       "metadata": {
         "description": "Password for Container Registry."
       }
-    }
+    },
+      "storageType": {
+          "type": "string",
+          "defaultValue": "Standard_LRS",
+          "allowedValues": [
+              "Standard_LRS"
+          ]
+      }
   },
   "variables": {
     "location": "[resourceGroup().location]",
@@ -75,7 +82,8 @@
     "imageReference": "[variables('osType')]",
     "computeApiVersion": "2017-03-30",
     "networkApiVersion": "2017-04-01",
-    "insightsApiVersion": "2015-04-01"
+    "insightsApiVersion": "2015-04-01",
+      "storageName": "[concat('storage', uniqueString(resourceGroup().id))]"
   },
   "resources": [
     {
@@ -348,6 +356,19 @@
           }
         ]
       }
-    }
+    },
+      {
+          "name": "[variables('storageName')]",
+          "type": "Microsoft.Storage/storageAccounts",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2015-06-15",
+          "dependsOn": [ ],
+          "tags": {
+              "displayName": "storage"
+          },
+          "properties": {
+              "accountType": "[parameters('storageType')]"
+          }
+      }
   ]
 }
