@@ -47,13 +47,25 @@
         "description": "Password for Container Registry."
       }
     },
-      "storageType": {
-          "type": "string",
-          "defaultValue": "Standard_LRS",
-          "allowedValues": [
-              "Standard_LRS"
-          ]
+    "storageName": {
+      "type": "string",
+      "metadata": {
+        "description": "Password for Container Registry."
       }
+    },
+    "storagePassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for Container Registry."
+      }
+    },
+    "storageType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS"
+      ]
+    }
   },
   "variables": {
     "location": "[resourceGroup().location]",
@@ -284,7 +296,7 @@
                     "fileUris": [
                       "https://raw.githubusercontent.com/DeV1L/201-vmss-ubuntu-autoscale-docker/master/CustomScripts/autostart.sh"
                     ],
-                    "commandToExecute": "[concat('bash autostart.sh ',parameters('crUsername'), ' ', parameters('crPassword'))]"
+                    "commandToExecute": "[concat('bash autostart.sh ',parameters('crUsername'), ' ', parameters('crPassword'), ' ', parameters('storageName'), ' ', parameters('storagePassword'))]"
                   }
                 }
               }
