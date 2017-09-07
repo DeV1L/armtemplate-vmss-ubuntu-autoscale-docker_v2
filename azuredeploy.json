@@ -294,7 +294,7 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "https://raw.githubusercontent.com/DeV1L/201-vmss-ubuntu-autoscale-docker/master/CustomScripts/autostart.sh"
+                      "https://raw.githubusercontent.com/DeV1L/vmss-ubuntu-autoscale-docker_v2/master/CustomScripts/autostart.sh"
                     ],
                     "commandToExecute": "[concat('bash autostart.sh ',parameters('crUsername'), ' ', parameters('crPassword'), ' ', parameters('storageName'), ' ', parameters('storagePassword'))]"
                   }
