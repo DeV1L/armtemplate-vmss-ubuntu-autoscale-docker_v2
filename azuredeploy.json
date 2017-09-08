@@ -210,7 +210,7 @@
                 "id": "[variables('frontEndIPConfigID')]"
               },
               "protocol": "Tcp",
-              "frontendPortRangeStart": 9000,
+              "frontendPortRangeStart": 9020,
               "frontendPortRangeEnd": 9120,
               "backendPort": 443
             }
