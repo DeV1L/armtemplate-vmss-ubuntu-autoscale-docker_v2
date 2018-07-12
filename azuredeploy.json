@@ -50,13 +50,13 @@
     "storageName": {
       "type": "string",
       "metadata": {
-        "description": "Password for Container Registry."
+        "description": "Login for Azure File Share."
       }
     },
     "storagePassword": {
       "type": "securestring",
       "metadata": {
-        "description": "Password for Container Registry."
+        "description": "Password for Azure File Share."
       }
     },
     "storageType": {
