@@ -202,18 +202,6 @@
               "frontendPortRangeEnd": "[variables('natEndPort')]",
               "backendPort": "[variables('natBackendPort')]"
             }
-          },
-          {
-            "name": "natpool2",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('frontEndIPConfigID')]"
-              },
-              "protocol": "Tcp",
-              "frontendPortRangeStart": 9020,
-              "frontendPortRangeEnd": 9120,
-              "backendPort": 443
-            }
           }
         ]
       }
