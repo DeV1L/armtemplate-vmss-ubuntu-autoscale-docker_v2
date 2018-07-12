@@ -176,6 +176,28 @@
                 "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/probes/', 'ProbeRule_80')]"
               }
             }
+          },
+          {
+            "name": "TCP_443",
+            "etag": "W/\"69fb6563-b4ac-4fec-8d5e-6d2e0358acb1",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "frontendIPConfiguration": {
+                "id": "[variables('frontEndIPConfigID')]"
+              },
+              "frontendPort": 443,
+              "backendPort": 443,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 4,
+              "protocol": "Tcp",
+              "loadDistribution": "SourceIP",
+              "backendAddressPool": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolName'))]"
+              },
+              "probe": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/probes/', 'ProbeRule_443')]"
+              }
+            }
           }
         ],
         "probes": [
@@ -185,6 +207,17 @@
               "provisioningState": "Succeeded",
               "protocol": "Tcp",
               "port": 80,
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2
+            }
+          },
+          {
+            "name": "ProbeRule_443",
+            "etag": "W/\"c915ba9f-9baf-481e-894c-0f874adf3ea3",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "protocol": "Tcp",
+              "port": 443,
               "intervalInSeconds": 5,
               "numberOfProbes": 2
             }
