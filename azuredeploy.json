@@ -294,9 +294,6 @@
                         "loadBalancerInboundNatPools": [
                           {
                             "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/inboundNatPools/', variables('natPoolName'))]"
-                          },
-                          {
-                            "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/inboundNatPools/natpool2')]"
                           }
                         ]
                       }
