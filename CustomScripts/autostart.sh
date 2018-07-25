@@ -29,7 +29,7 @@ services:
     depends_on:
       - datacontainer
   datacontainer:
-    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/datacontainer:0.1
+    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/datacontainer:0.2
     volumes:
       - data:/data
 
