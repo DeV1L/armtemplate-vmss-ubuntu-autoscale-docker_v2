@@ -11,13 +11,14 @@ sudo mount -t cifs //$3.file.core.windows.net/www /mnt/html -o vers=3.0,username
 
 sudo docker login arkadiumcom.azurecr.io -u $1 -p $2
 
-cat <<EOF > docker-compose.yml
+mkdir -p /opt/arkadium/
+cat <<EOF > /opt/arkadium/docker-compose.yml
 version: "3"
 
 services:
 
   frontend:
-    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/nginx-ssl-cahce:0.3
+    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/nginx-ssl-cahce:0.5
     ports:
       - "80:80"
       - "443:443"
@@ -37,4 +38,5 @@ volumes:
   data:
 EOF
 
-sudo docker-compose up -d
+sudo echo "sudo docker-compose -f /opt/arkadium/docker-compose.yml up -d" >> /etc/rc.local
+sudo docker-compose -f /opt/arkadium/docker-compose.yml up -d
