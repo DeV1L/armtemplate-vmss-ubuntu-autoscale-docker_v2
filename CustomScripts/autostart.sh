@@ -38,5 +38,6 @@ volumes:
   data:
 EOF
 
+sudo echo "sudo mount -t cifs //$3.file.core.windows.net/www /mnt/html -o vers=3.0,username=$3,password=$4,dir_mode=0777,file_mode=0777,sec=ntlmssp" >> /etc/rc.local
 sudo echo "sudo docker-compose -f /opt/arkadium/docker-compose.yml up -d" >> /etc/rc.local
 sudo docker-compose -f /opt/arkadium/docker-compose.yml up -d
