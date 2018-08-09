@@ -33,9 +33,24 @@ services:
     image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/datacontainer:0.2
     volumes:
       - data:/data
+  omsagent:
+    image: microsoft/oms
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/log:/var/log
+      - /var/lib/docker/containers:/var/lib/docker/containers
+    environment:
+      - KEY=$6
+      - WSID=$7
+    ports:
+      - "127.0.0.1:25225:25225"
+      - "127.0.0.1:25224:25224/udp"
+    privileged: true
+    restart: always
 
 volumes:
   data:
+
 EOF
 
 sudo echo "//$3.file.core.windows.net/www	/mnt/html	cifs	username=$3,password=$4,dir_mode=0777,file_mode=0777,sec=ntlmssp  0       0" >> /etc/fstab

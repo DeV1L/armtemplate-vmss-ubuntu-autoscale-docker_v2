@@ -67,6 +67,18 @@
       "allowedValues": [
         "Standard_LRS"
       ]
+    },
+    "OMSKEY": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Key from OMS."
+      }
+    },
+    "OMSWSID": {
+      "type": "securestring",
+      "metadata": {
+        "description": "WSID from OMS."
+      }
     }
   },
   "variables": {
@@ -314,9 +326,9 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "https://raw.githubusercontent.com/DeV1L/armtemplate-vmss-ubuntu-autoscale-docker_v2/redirect-https/CustomScripts/autostart.sh"
+                      "https://raw.githubusercontent.com/DeV1L/armtemplate-vmss-ubuntu-autoscale-docker_v2/oms-extension/CustomScripts/autostart.sh"
                     ],
-                    "commandToExecute": "[concat('bash autostart.sh ',parameters('crUsername'), ' ', parameters('crPassword'), ' ', parameters('storageName'), ' ', parameters('storagePassword'))]"
+                    "commandToExecute": "[concat('bash autostart.sh ',parameters('crUsername'), ' ', parameters('crPassword'), ' ', parameters('storageName'), ' ', parameters('storagePassword'), ' ', parameters('OMSKEY'), ' ', parameters('OMSWSID'))]"
                   }
                 }
               }
