@@ -4,13 +4,14 @@
   "parameters": {
     "vmSku": {
       "type": "string",
-      "defaultValue": "Standard_A0",
+      "defaultValue": "Standard_F2",
       "metadata": {
         "description": "Size of VMs in the VM Scale Set."
       }
     },
     "vmssName": {
       "type": "string",
+      "defaultValue": "arkadium",
       "metadata": {
         "description": "String used as a base for naming resources (9 characters or less). A hash is prepended to this string for some resources, and resource-specific information is appended."
       },
@@ -18,6 +19,7 @@
     },
     "instanceCount": {
       "type": "int",
+      "defaultValue": 2,
       "metadata": {
         "description": "Number of VM instances (100 or less)."
       },
@@ -50,13 +52,13 @@
     "storageName": {
       "type": "string",
       "metadata": {
-        "description": "Password for Container Registry."
+        "description": "Login for Azure File Share."
       }
     },
     "storagePassword": {
       "type": "securestring",
       "metadata": {
-        "description": "Password for Container Registry."
+        "description": "Password for Azure File Share."
       }
     },
     "storageType": {
@@ -168,12 +170,34 @@
               "enableFloatingIP": false,
               "idleTimeoutInMinutes": 4,
               "protocol": "Tcp",
-              "loadDistribution": "Default",
+              "loadDistribution": "SourceIP",
               "backendAddressPool": {
                 "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolName'))]"
               },
               "probe": {
                 "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/probes/', 'ProbeRule_80')]"
+              }
+            }
+          },
+          {
+            "name": "Pool_443",
+            "etag": "W/\"69fb6563-b4ac-4fec-8d5e-6d2e0358acb1",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "frontendIPConfiguration": {
+                "id": "[variables('frontEndIPConfigID')]"
+              },
+              "frontendPort": 443,
+              "backendPort": 443,
+              "enableFloatingIP": false,
+              "idleTimeoutInMinutes": 4,
+              "protocol": "Tcp",
+              "loadDistribution": "SourceIP",
+              "backendAddressPool": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolName'))]"
+              },
+              "probe": {
+                "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/probes/', 'ProbeRule_443')]"
               }
             }
           }
@@ -185,6 +209,17 @@
               "provisioningState": "Succeeded",
               "protocol": "Tcp",
               "port": 80,
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2
+            }
+          },
+          {
+            "name": "ProbeRule_443",
+            "etag": "W/\"c915ba9f-9baf-481e-894c-0f874adf3ea3",
+            "properties": {
+              "provisioningState": "Succeeded",
+              "protocol": "Tcp",
+              "port": 443,
               "intervalInSeconds": 5,
               "numberOfProbes": 2
             }
@@ -201,18 +236,6 @@
               "frontendPortRangeStart": "[variables('natStartPort')]",
               "frontendPortRangeEnd": "[variables('natEndPort')]",
               "backendPort": "[variables('natBackendPort')]"
-            }
-          },
-          {
-            "name": "natpool2",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('frontEndIPConfigID')]"
-              },
-              "protocol": "Tcp",
-              "frontendPortRangeStart": 9020,
-              "frontendPortRangeEnd": 9120,
-              "backendPort": 443
             }
           }
         ]
@@ -261,19 +284,16 @@
                       "name": "[variables('ipConfigName')]",
                       "properties": {
                         "subnet": {
-                          "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('subnetName'))]"
+                          "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
                         },
                         "loadBalancerBackendAddressPools": [
                           {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/backendAddressPools/', variables('bePoolName'))]"
+                            "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/backendAddressPools/', variables('bePoolName'))]"
                           }
                         ],
                         "loadBalancerInboundNatPools": [
                           {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatPools/', variables('natPoolName'))]"
-                          },
-                          {
-                            "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('loadBalancerName'), '/inboundNatPools/natpool2')]"
+                            "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName')), '/inboundNatPools/', variables('natPoolName'))]"
                           }
                         ]
                       }
@@ -294,7 +314,7 @@
                   "autoUpgradeMinorVersion": true,
                   "settings": {
                     "fileUris": [
-                      "https://raw.githubusercontent.com/DeV1L/vmss-ubuntu-autoscale-docker_v2/master/CustomScripts/autostart.sh"
+                      "https://raw.githubusercontent.com/DeV1L/armtemplate-vmss-ubuntu-autoscale-docker_v2/redirect-https/CustomScripts/autostart.sh"
                     ],
                     "commandToExecute": "[concat('bash autostart.sh ',parameters('crUsername'), ' ', parameters('crPassword'), ' ', parameters('storageName'), ' ', parameters('storagePassword'))]"
                   }
