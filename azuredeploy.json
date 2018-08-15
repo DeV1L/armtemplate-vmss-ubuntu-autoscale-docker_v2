@@ -80,6 +80,13 @@
         "description": "WSID from OMS."
       }
     },
+    "AppInsightRGname": {
+      "type": "string",
+      "defaultValue": "monitoring",
+      "metadata": {
+        "description": "ApplicationInsights Resource Group name"
+      }
+    },
     "AppInsightName": {
       "type": "string",
       "defaultValue": "arkadium.com",
@@ -369,7 +376,7 @@
                 "metricTrigger": {
                   "metricName": "browserTimings/totalDuration",
                   "metricNamespace": "",
-                  "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/microsoft.insights/components/', parameters('AppInsightName'))]",
+                  "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  parameters('AppInsightRGname'), '/providers/microsoft.insights/components/', parameters('AppInsightName'))]",
                   "timeGrain": "PT5M",
                   "statistic": "Average",
                   "timeWindow": "PT15M",
