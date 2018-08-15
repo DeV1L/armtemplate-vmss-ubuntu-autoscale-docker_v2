@@ -79,6 +79,13 @@
       "metadata": {
         "description": "WSID from OMS."
       }
+    },
+    "AppInsightName": {
+      "type": "string",
+      "defaultValue": "arkadium.com",
+      "metadata": {
+        "description": "ApplicationInsights instance name"
+      }
     }
   },
   "variables": {
@@ -351,7 +358,7 @@
         "enabled": true,
         "profiles": [
           {
-            "name": "Profile1",
+            "name": "Scale based on browserTimings/totalDuration",
             "capacity": {
               "minimum": "1",
               "maximum": "10",
@@ -360,43 +367,56 @@
             "rules": [
               {
                 "metricTrigger": {
-                  "metricName": "Percentage CPU",
+                  "metricName": "browserTimings/totalDuration",
                   "metricNamespace": "",
-                  "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/Microsoft.Compute/virtualMachineScaleSets/', parameters('vmSSName'))]",
-                  "timeGrain": "PT1M",
+                  "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/microsoft.insights/components/', parameters('AppInsightName'))]",
+                  "timeGrain": "PT5M",
                   "statistic": "Average",
-                  "timeWindow": "PT10M",
+                  "timeWindow": "PT15M",
                   "timeAggregation": "Average",
                   "operator": "GreaterThan",
-                  "threshold": 70
+                  "threshold": 10
                 },
                 "scaleAction": {
                   "direction": "Increase",
                   "type": "ChangeCount",
                   "value": "1",
-                  "cooldown": "PT7M"
+                  "cooldown": "PT10M"
                 }
               },
               {
                 "metricTrigger": {
-                  "metricName": "Percentage CPU",
+                  "metricName": "browserTimings/totalDuration",
                   "metricNamespace": "",
-                  "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/Microsoft.Compute/virtualMachineScaleSets/', parameters('vmSSName'))]",
-                  "timeGrain": "PT1M",
+                  "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  resourceGroup().name, '/providers/microsoft.insights/components/', parameters('AppInsightName'))]",
+                  "timeGrain": "PT5M",
                   "statistic": "Average",
-                  "timeWindow": "PT5M",
+                  "timeWindow": "PT15M",
                   "timeAggregation": "Average",
                   "operator": "LessThan",
-                  "threshold": 30
+                  "threshold": 5
                 },
                 "scaleAction": {
                   "direction": "Decrease",
                   "type": "ChangeCount",
                   "value": "1",
-                  "cooldown": "PT3M"
+                  "cooldown": "PT10M"
                 }
               }
             ]
+          }
+        ],
+        "notifications": [
+          {
+            "operation": "Scale",
+            "email": {
+              "sendToSubscriptionAdministrator": false,
+              "sendToSubscriptionCoAdministrators": false,
+              "customEmails": [
+                "y.savchenko@arkadium.com"
+              ]
+            },
+            "webhooks": [ ]
           }
         ]
       }
