@@ -377,9 +377,9 @@
                   "metricName": "browserTimings/totalDuration",
                   "metricNamespace": "",
                   "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  parameters('AppInsightRGname'), '/providers/microsoft.insights/components/', parameters('AppInsightName'))]",
-                  "timeGrain": "PT5M",
+                  "timeGrain": "PT1M",
                   "statistic": "Average",
-                  "timeWindow": "PT15M",
+                  "timeWindow": "PT10M",
                   "timeAggregation": "Average",
                   "operator": "GreaterThan",
                   "threshold": 10000
@@ -388,7 +388,7 @@
                   "direction": "Increase",
                   "type": "ChangeCount",
                   "value": "1",
-                  "cooldown": "PT10M"
+                  "cooldown": "PT15M"
                 }
               },
               {
@@ -396,9 +396,9 @@
                   "metricName": "browserTimings/totalDuration",
                   "metricNamespace": "",
                   "metricResourceUri": "[concat('/subscriptions/',subscription().subscriptionId, '/resourceGroups/',  parameters('AppInsightRGname'), '/providers/microsoft.insights/components/', parameters('AppInsightName'))]",
-                  "timeGrain": "PT5M",
+                  "timeGrain": "PT1M",
                   "statistic": "Average",
-                  "timeWindow": "PT15M",
+                  "timeWindow": "PT10M",
                   "timeAggregation": "Average",
                   "operator": "LessThan",
                   "threshold": 5000
@@ -407,7 +407,7 @@
                   "direction": "Decrease",
                   "type": "ChangeCount",
                   "value": "1",
-                  "cooldown": "PT10M"
+                  "cooldown": "PT15M"
                 }
               }
             ]
