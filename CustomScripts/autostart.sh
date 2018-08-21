@@ -21,7 +21,7 @@ version: "3"
 services:
 
   frontend:
-    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/nginx-ssl-cahce:0.5
+    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/nginx-ssl-cache:0.6
     ports:
       - "80:80"
       - "443:443"
