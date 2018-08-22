@@ -21,7 +21,7 @@ version: "3"
 services:
 
   frontend:
-    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/nginx-ssl-cache:0.6
+    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/nginx-ssl-cache:0.7
     ports:
       - "80:80"
       - "443:443"
@@ -33,7 +33,7 @@ services:
     depends_on:
       - datacontainer
   datacontainer:
-    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/datacontainer:0.2
+    image: arkadiumcom.azurecr.io/arkadiumcom/arkadiumcom/datacontainer:0.3
     volumes:
       - data:/data
   omsagent:
@@ -43,8 +43,8 @@ services:
       - /var/log:/var/log
       - /var/lib/docker/containers:/var/lib/docker/containers
     environment:
-      - KEY=$6
-      - WSID=$7
+      - KEY=$5
+      - WSID=$6
     ports:
       - "127.0.0.1:25225:25225"
       - "127.0.0.1:25224:25224/udp"
